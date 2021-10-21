@@ -1,24 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//SUGESTAO DE ESTRUTURA PARA GUARDAR UM BLOCO
-//PODE MUDAR SE QUISER
+
 typedef struct bloco{
   int id;
   int altura;
   struct bloco* prox;
 } bloco;
-
 typedef struct bloco * p_Bloco;
 
-
-//SUGESTAO DE ESTRUTURA PARA GUARDAR UM MACACO
-//PODE MUDAR SE QUISER
 typedef struct Macaco{
   int altura;
   struct bloco* lista_blocos;
 } Macaco;
-
 typedef struct Macaco * p_Macaco;
 
 p_Macaco iniciaVetor(int size){
@@ -39,10 +33,9 @@ p_Macaco inicializa_macacos(int nMonkey){
     branch[i].altura = 0;
     branch[i].lista_blocos = NULL;
   }
+
   return branch;
 }
-
-
 
 void bota_no_menor (p_Macaco branch, int nMonkey, int blockId, int blockH){
   p_Bloco auxBlock = inicializeVectorBlock(1);
@@ -62,10 +55,6 @@ void bota_no_menor (p_Macaco branch, int nMonkey, int blockId, int blockH){
   branch[menor_indice].lista_blocos = auxBlock;
  }
 
-
-
-//SUGESTAO DE FUNCOES PARA IMPRESSAO
-//PODE MUDAR SE QUISER
 void imprime_blocos(p_Bloco lista){
   if(lista == NULL) return;
   imprime_blocos(lista->prox);
@@ -81,12 +70,11 @@ void imprime_macacos(p_Macaco M, int num_macacos){
 }
 
 void free_list (p_Bloco list){
-  if(list == NULL){
-    return;
-  }
+  if(list == NULL) return;
   free_list(list->prox);
   free(list);
 }
+
 void libera_macacos(p_Macaco branch,int nMonkey){
   for(int i = 0; i < nMonkey; i++){
     free_list(branch[i].lista_blocos);
@@ -95,39 +83,25 @@ void libera_macacos(p_Macaco branch,int nMonkey){
 }
 
 
-
-
-
-
-
-
-//******************************
-//VOCE NAO PODE MODIFICAR A MAIN
-//******************************
 int main(int argc, char * argv[]){
-  
   p_Macaco M;
   int num_macacos;
   int id_bloco;
   int altura_bloco;
   
-  //le o numero de macacos
+
   scanf("%d", &num_macacos);
-  
   M = inicializa_macacos(num_macacos);
-  
-  //le o primeiro bloco
   scanf("%d %d", &id_bloco, &altura_bloco);
+
   while(id_bloco != -1){
     bota_no_menor(M, num_macacos, id_bloco, altura_bloco);
-    //le o proximo bloco
     scanf("%d %d", &id_bloco, &altura_bloco);
   }
 
   imprime_macacos(M, num_macacos);
-  
-  //Lembre que cada macaca tem uma lista que precisa ser liberada
   libera_macacos(M, num_macacos);
+
   return 0;
 }
 
